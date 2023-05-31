@@ -16,10 +16,13 @@
     "@babel/preset-env": "^7.22.4",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
+    "gulp-clean": "^0.4.0",
     "gulp-cssmin": "^0.2.0",
+    "gulp-file-include": "^2.3.0",
     "gulp-htmlmin": "^5.0.1",
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
+    "gulp-webserver": "^0.9.1",
     "sass": "^1.62.1"
   },
   "browserslist": [

@@ -15,6 +15,12 @@ const uglify = require("gulp-uglify");
 const babel = require("gulp-babel");
 // 压缩 html：压缩html
 const htmlMin = require("gulp-htmlmin");
+// 删除文件目录
+const clean = require("gulp-clean");
+// 启动服务
+const webServer = require("gulp-webserver");
+// 抽离公共组件
+const fileInclude = require("gulp-file-include");
 
 // **************  创建任务   **************
 // 1、创建处理 css 的任务
@@ -67,6 +73,10 @@ const jsHandler = function () {
 const htmlHandler = function () {
   return gulp
     .src("./index.html") // 源文件
+    .pipe(fileInclude({ // 自定义html片段、引入对应的 html 片段
+      prefix: '@-@', // 自定义标识符
+      basepath: './src/components'
+    }))
     .pipe(
       htmlMin({
         collapseWhitespace: true, // 移除空格
@@ -93,9 +103,55 @@ const libHandler = function () {
     .pipe(gulp.dest("./dist/lib/"));
 };
 
+// 7、删除目录下文件
+const cleanHandler = function () {
+  return gulp.src('./dist/', { allowEmpty: true }).pipe(clean());
+}
+
+// 8、配置服务
+const webServerHandler = function () {
+  return gulp
+    .src('./dist/')
+    .pipe(webServer({
+      host: 'www.mzy.com', // localhost
+      port: '8088',
+      livereload: true, // 文件更新，刷新页面
+      open: './index.html', // 默认打开文件
+      proxies: [ // 配置代理
+        {
+          source: '/ddd', // 代理标识符
+          target: 'https://www.bai.com/aa/bb/cc' // 代理目标地址
+        }
+      ]
+    }))
+}
+
+// 9、监控任务
+const watchHandler = function () {
+  // 此任务不能使用 return 中断
+  gulp.watch('./src/css/*.scss', sassHandler)
+  gulp.watch('./src/js/*.js', jsHandler)
+  gulp.watch('./index.html', htmlHandler)
+}
+
 module.exports.cssHandler = cssHandler;
 module.exports.sassHandler = sassHandler;
 module.exports.jsHandler = jsHandler;
 module.exports.htmlHandler = htmlHandler;
 module.exports.imagesHandler = imagesHandler;
 module.exports.libHandler = libHandler;
+module.exports.cleanHandler = cleanHandler;
+module.exports.webServerHandler = webServerHandler;
+module.exports.watchHandler = watchHandler;
+
+
+// **************  配置默认任务   **************
+// 方式一：gulp.task('default', () => { })
+// 方式二：module.exports.default = () => {}
+// 执行：gulp default  ==>  gulp
+module.exports.default = gulp.series(
+  cleanHandler,
+  gulp.parallel(cssHandler, sassHandler, jsHandler, htmlHandler, imagesHandler, libHandler),
+  webServerHandler,
+  watchHandler
+)

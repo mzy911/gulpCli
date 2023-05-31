@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <h1>
-    Gulp
-  </h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- @-@：自定义标识符， 第二个参数 -->
+    @-@include('./head.html',{title:'首页'})
+    <h1>Gulp</h1>
+    @-@include('./fooder.html')
+  </body>
 
-<script>
-
-  /**
+  <script>
+    /**
 
   常用API
 
@@ -52,8 +52,5 @@
     作用：管道函数
     例子：gulp.src(路径).pipe(压缩任务).pipe(转码).pipe(gulp.dest('/dist'))
   */
-
-
-
-</script>
+  </script>
 </html>
