@@ -1,0 +1,11 @@
+@import './variable.sass';
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #ddd;
+  width: calc(100% - 50px);
+  div {
+    border: 1px solid $c;
+  }
+}
